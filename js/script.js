@@ -27,12 +27,14 @@ var model = {
 //Testing the Code Functionality
 
 var octopus = {
+  currentRender: null,
   addNewCat: function(catName,picLoc,clicks){
       model.add({
           name: catName,
           loc: picLoc,
           clicks: clicks
       });
+      view.list.render()
   },
   updateClick: function(){
       console.log("empty")
@@ -40,43 +42,76 @@ var octopus = {
   allCats: function(){
     return model.getAllCats()
   },
+  getSelectedCat: function(catid){
+    allCats = octopus.allCats()
+    for(i=0;i<allCats.length;i++){
+      if(allCats[i].name == catid){
+        if (!octopus.currentRender){
+          octopus.currentRender = allCats[i]
+          view.cat.render(octopus.currentRender)
+        }else if(octopus.currentRender.name != catid){
+          octopus.currentRender = allCats[i]
+          view.cat.render(octopus.currentRender)
+        }
+      }
+    }
+  },
   init: function() {
     model.init()
-    view.list.init(octopus.allCats())
+    view.list.init()
     view.cat.init()
+    view.cat.render(octopus.currentRender)
   }
 };
 
 var view = {
   list: {
-      init: function(catArr){
-        if(catArr.length > 0){
-          el = document.createElement("list")
-          ul = document.createElement("ul")
-          for(i=0;i<catArr.length;i++) {
+      init: function(){
+          list = document.getElementById("list");
+          ul = document.createElement("ul");
+          ul.id = "cat-list";
+          list.append(ul);
+      },
+      render: function(){
+          allCats = octopus.allCats()
+          ul = document.getElementById("cat-list")
+          for(i=0;i<allCats.length;i++) {
             li = document.createElement("li")
-            li.innerText = catArr[i].name
-            li.id = catArr[i].name
+            li.innerText = allCats[i].name
+            li.id = allCats[i].name
             li.addEventListener("click", (function(li) {
               return function() {
-                  //catName(li.id)
-                  console.log("Hello")
+                  octopus.getSelectedCat(li.id)
                 }
-            })(li))}
-          ul.append(li)
-          el.append(ul)
-          view.list.render(el)}
-      },
-      render: function(list){
-        el_top = document.getElementById("top")
-        el_top.append(list)
+            })(li))
+            ul.append(li);
+          };
       }
   },
   cat: {
     init: function(){
+      displayArea = document.getElementById("display");
+      imgHeader = document.createElement("h3");
+      imgHeader.id = "cat-header"
+      img = document.createElement("img");
+      img.id = "img"
+      img.addEventListener('click', (function() {
+            return function() {
 
+            };
+      })())
+      clicks= document.createElement("p")
+      clicks.id = "clicks"
+      displayArea.append(imgHeader)
+      displayArea.append(img)
+      displayArea.append(clicks)
     },
-    render: function(){
+    render: function(obj){
+        if(obj){
+          $("#cat-header").text(obj.name);
+          $("#img").attr("src",obj.imgloc);
+          $("img").innerText = obj.clicks;
+        }
     }
   }
 };
@@ -84,4 +119,9 @@ var view = {
 octopus.init()
 octopus.addNewCat("cat1","img/img1.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
-console.log(octopus.allCats())
+
+
+
+
+//Check if the selected Cat is already Rendered
+//If it is not rendered --> Render the cat
