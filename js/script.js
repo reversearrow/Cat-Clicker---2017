@@ -16,9 +16,11 @@ var model = {
     data = JSON.parse(localStorage.data)
     for(i=0;i<data.length;i++){
       if (data[i].name == obj.name) {
-        data[i].clicks = data[i].clicks + 1;
+        data[i].clicks +=  1;
+        console.log(data[i].clicks)
       }
     }
+    localStorage.data = JSON.stringify(data)
   },
   getAllCats: function(){
     return JSON.parse(localStorage.data)
