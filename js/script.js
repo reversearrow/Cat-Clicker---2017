@@ -12,6 +12,14 @@ var model = {
     }
     localStorage.data = JSON.stringify(data)
   },
+  addClicks: function(obj){
+    data = JSON.parse(localStorage.data)
+    for(i=0;i<data.length;i++){
+      if (data[i].name == obj.name) {
+        data[i].clicks = data[i].clicks + 1;
+      }
+    }
+  },
   getAllCats: function(){
     return JSON.parse(localStorage.data)
   },
@@ -36,8 +44,8 @@ var octopus = {
       });
       view.list.render()
   },
-  updateClick: function(){
-      console.log("empty")
+  updateClick: function(obj){
+      model.addClicks(obj)
   },
   allCats: function(){
     return model.getAllCats()
@@ -60,7 +68,6 @@ var octopus = {
     model.init()
     view.list.init()
     view.cat.init()
-    view.cat.render(octopus.currentRender)
   }
 };
 
@@ -76,15 +83,18 @@ var view = {
           allCats = octopus.allCats()
           ul = document.getElementById("cat-list")
           for(i=0;i<allCats.length;i++) {
-            li = document.createElement("li")
-            li.innerText = allCats[i].name
-            li.id = allCats[i].name
-            li.addEventListener("click", (function(li) {
-              return function() {
-                  octopus.getSelectedCat(li.id)
-                }
-            })(li))
-            ul.append(li);
+              idExists = document.getElementById(allCats[i].name)
+              if(!idExists){
+                li = document.createElement("li")
+                li.innerText = allCats[i].name
+                li.id = allCats[i].name
+                li.addEventListener("click", (function(li) {
+                  return function() {
+                      octopus.getSelectedCat(li.id)
+                    }
+                  })(li))
+                  ul.append(li);
+              }
           };
       }
   },
@@ -95,11 +105,6 @@ var view = {
       imgHeader.id = "cat-header"
       img = document.createElement("img");
       img.id = "img"
-      img.addEventListener('click', (function() {
-            return function() {
-
-            };
-      })())
       clicks= document.createElement("p")
       clicks.id = "clicks"
       displayArea.append(imgHeader)
@@ -107,10 +112,22 @@ var view = {
       displayArea.append(clicks)
     },
     render: function(obj){
+        console.log(obj)
         if(obj){
-          $("#cat-header").text(obj.name);
-          $("#img").attr("src",obj.imgloc);
-          $("img").innerText = obj.clicks;
+          header = document.getElementById("cat-header");
+          header.innerText = obj.name;
+          img = document.getElementById("img");
+          img.addEventListener('click', (function() {
+                return function() {
+                      octopus.updateClick(obj)
+                };
+          })(obj))
+          img.src = obj.loc;
+          clicks = document.getElementById("clicks");
+          clicks.innerText = obj.clicks;
+          //$("#cat-header").text(obj.name);
+          //$("#img").attr("src",obj.loc);
+          //$("#clicks").innerText = obj.clicks;
         }
     }
   }
@@ -118,6 +135,7 @@ var view = {
 
 octopus.init()
 octopus.addNewCat("cat1","img/img1.jpg",0)
+octopus.addNewCat("cat2","img/img2.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
 
 
