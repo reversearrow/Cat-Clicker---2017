@@ -34,7 +34,6 @@ var model = {
   }
 };
 
-//Testing the Code Functionality
 
 var octopus = {
   currentRender: null,
@@ -140,8 +139,3 @@ octopus.addNewCat("cat1","img/img1.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
 
-
-
-
-//Check if the selected Cat is already Rendered
-//If it is not rendered --> Render the cat
