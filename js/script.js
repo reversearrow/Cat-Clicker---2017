@@ -2,35 +2,23 @@ var model = {
   //Data for the cats
   init: function(){
     if(!localStorage.data){
-      localStorage.data = JSON.stringify([])
+      localStorage.data = JSON.stringify({})
     }
   },
   add: function(obj){
-    data = JSON.parse(localStorage.data)
-    if(!model.checkDuplicates(data,obj)){
-      data.push(obj)
+    data = JSON.parse(localStorage.data);
+    key = obj.name
+    if(!data[key]){
+      data[obj.name] = obj;
+      localStorage.data = JSON.stringify(data)
     }
-    localStorage.data = JSON.stringify(data)
   },
   addClicks: function(obj){
     data = JSON.parse(localStorage.data)
-    for(i=0;i<data.length;i++){
-      if (data[i].name == obj.name) {
-        data[i].clicks +=  1;
-        console.log(data[i].clicks)
-      }
-    }
     localStorage.data = JSON.stringify(data)
   },
   getAllCats: function(){
     return JSON.parse(localStorage.data)
-  },
-  checkDuplicates: function(arr,obj){
-    for(i=0;i<arr.length;i++){
-      if(arr[i].name==obj.name){
-        return true
-      };
-    }return false
   }
 };
 
@@ -47,6 +35,10 @@ var octopus = {
   },
   updateClick: function(obj){
       model.addClicks(obj)
+  },
+  allCatsKeys: function(){
+      allKeys = Object.keys(model.getAllCats());
+      return allKeys;
   },
   allCats: function(){
     return model.getAllCats()
@@ -81,16 +73,17 @@ var view = {
           list.append(ul);
       },
       render: function(){
-          allCats = octopus.allCats()
+          allCats = octopus.allCatsKeys()
           ul = document.getElementById("cat-list")
           for(i=0;i<allCats.length;i++) {
-              idExists = document.getElementById(allCats[i].name)
+              idExists = document.getElementById(allCats[i])
               if(!idExists){
                 li = document.createElement("li")
-                li.innerText = allCats[i].name
-                li.id = allCats[i].name
+                li.innerText = allCats[i]
+                li.id = allCats[i]
                 li.addEventListener("click", (function(li) {
                   return function() {
+                      console.log("?")
                       octopus.getSelectedCat(li.id)
                     }
                   })(li))
@@ -133,9 +126,9 @@ var view = {
     }
   }
 };
-
+localStorage.clear()
 octopus.init()
 octopus.addNewCat("cat1","img/img1.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
-
+octopus.addNewCat("cat1","img/img1.jpg",0)
