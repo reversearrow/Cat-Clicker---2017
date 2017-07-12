@@ -44,18 +44,14 @@ var octopus = {
     return model.getAllCats()
   },
   getSelectedCat: function(catid){
-    allCats = octopus.allCats()
-    for(i=0;i<allCats.length;i++){
-      if(allCats[i].name == catid){
-        if (!octopus.currentRender){
-          octopus.currentRender = allCats[i]
-          view.cat.render(octopus.currentRender)
-        }else if(octopus.currentRender.name != catid){
-          octopus.currentRender = allCats[i]
-          view.cat.render(octopus.currentRender)
-        }
+    cat = octopus.allCats()[catid]
+    if (!octopus.currentRender){
+        octopus.currentRender = cat
+        view.cat.render(octopus.currentRender)
+      }else if(octopus.currentRender.name != catid){
+        octopus.currentRender = cat
+        view.cat.render(octopus.currentRender)
       }
-    }
   },
   init: function() {
     model.init()
@@ -83,7 +79,6 @@ var view = {
                 li.id = allCats[i]
                 li.addEventListener("click", (function(li) {
                   return function() {
-                      console.log("?")
                       octopus.getSelectedCat(li.id)
                     }
                   })(li))
