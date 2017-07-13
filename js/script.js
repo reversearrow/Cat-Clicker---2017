@@ -13,9 +13,9 @@ var model = {
       localStorage.data = JSON.stringify(data)
     }
   },
-  addClicks: function(catname){
+  addClicks: function(catName){
     data = JSON.parse(localStorage.data)
-    data[catname].clicks += 1
+    data[catName].clicks += 1
     localStorage.data = JSON.stringify(data)
   },
   getAllCats: function(){
@@ -36,7 +36,7 @@ var octopus = {
   },
   updateClick: function(catName){
       model.addClicks(catName)
-      view.cat.render()
+      octopus.getSelectedCat(catName)
   },
   allCatsKeys: function(){
       allKeys = Object.keys(model.getAllCats());
@@ -45,8 +45,8 @@ var octopus = {
   allCats: function(){
     return model.getAllCats()
   },
-  getSelectedCat: function(catid){
-    cat = octopus.allCats()[catid]
+  getSelectedCat: function(catName){
+    cat = octopus.allCats()[catName]
     octopus.currentRender = cat
     view.cat.render()
     /*
@@ -99,6 +99,12 @@ var view = {
       imgHeader.id = "cat-header"
       img = document.createElement("img");
       img.id = "img"
+      img.addEventListener('click', (function() {
+            return function() {
+                  //console.log(imgHeader.innerText)
+                  octopus.updateClick(imgHeader.innerText)
+            };
+      })(imgHeader))
       clicks= document.createElement("p")
       clicks.id = "clicks"
       displayArea.append(imgHeader)
@@ -107,15 +113,11 @@ var view = {
     },
     render: function(){
         obj = octopus.currentRender
+        //console.log(obj)
         if(obj){
           header = document.getElementById("cat-header");
           header.innerText = obj.name;
           img = document.getElementById("img");
-          img.addEventListener('click', (function() {
-                return function() {
-                      octopus.updateClick(obj.name)
-                };
-          })(obj.name))
           img.src = obj.loc;
           clicks = document.getElementById("clicks");
           clicks.innerText = obj.clicks;
@@ -126,7 +128,7 @@ var view = {
     }
   }
 };
-localStorage.clear()
+
 octopus.init()
 octopus.addNewCat("cat1","img/img1.jpg",0)
 octopus.addNewCat("cat2","img/img2.jpg",0)
