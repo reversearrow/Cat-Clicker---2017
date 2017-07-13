@@ -13,8 +13,9 @@ var model = {
       localStorage.data = JSON.stringify(data)
     }
   },
-  addClicks: function(obj){
+  addClicks: function(catname){
     data = JSON.parse(localStorage.data)
+    data[catname].clicks += 1
     localStorage.data = JSON.stringify(data)
   },
   getAllCats: function(){
@@ -33,8 +34,9 @@ var octopus = {
       });
       view.list.render()
   },
-  updateClick: function(obj){
-      model.addClicks(obj)
+  updateClick: function(catName){
+      model.addClicks(catName)
+      view.cat.render()
   },
   allCatsKeys: function(){
       allKeys = Object.keys(model.getAllCats());
@@ -45,13 +47,16 @@ var octopus = {
   },
   getSelectedCat: function(catid){
     cat = octopus.allCats()[catid]
+    octopus.currentRender = cat
+    view.cat.render()
+    /*
     if (!octopus.currentRender){
         octopus.currentRender = cat
         view.cat.render(octopus.currentRender)
       }else if(octopus.currentRender.name != catid){
         octopus.currentRender = cat
         view.cat.render(octopus.currentRender)
-      }
+      }*/
   },
   init: function() {
     model.init()
@@ -100,17 +105,17 @@ var view = {
       displayArea.append(img)
       displayArea.append(clicks)
     },
-    render: function(obj){
-        console.log(obj)
+    render: function(){
+        obj = octopus.currentRender
         if(obj){
           header = document.getElementById("cat-header");
           header.innerText = obj.name;
           img = document.getElementById("img");
           img.addEventListener('click', (function() {
                 return function() {
-                      octopus.updateClick(obj)
+                      octopus.updateClick(obj.name)
                 };
-          })(obj))
+          })(obj.name))
           img.src = obj.loc;
           clicks = document.getElementById("clicks");
           clicks.innerText = obj.clicks;
