@@ -67,6 +67,10 @@ var octopus = {
     return model.getAllCats()
   },
   getSelectedCat: function(id){
+    checkAdmin = document.getElementById("admin");
+    if(!checkAdmin){
+        view.admin.init()
+    }
     cat = octopus.allCats()[id]
     //console.log(cat)
     octopus.currentRender = cat
@@ -91,7 +95,6 @@ var octopus = {
     model.init()
     view.list.init()
     view.cat.init()
-    view.admin.init()
   }
 };
 
@@ -160,12 +163,22 @@ var view = {
   },
   admin: {
     init: function(){
+      adminConsole = document.getElementById("admin-console");
       adminButton = document.createElement("button");
-      linebreak1 = document.createElement("br");
-      linebreak2 = document.createElement("br");
-      linebreak3 = document.createElement("br");
+      linebreak = document.createElement("br");
       adminButton.type = "submit";
       adminButton.innerText = "Admin"
+      adminButton.id = "admin"
+      adminConsole.append(adminButton);
+      adminConsole.append(linebreak);
+      adminButton.addEventListener("click",function(){
+          view.admin.render()
+          console.log("Hello")
+      })
+    },
+    render: function(){
+      linebreak1 = document.createElement("br");
+      linebreak2 = document.createElement("br");
       newNameLabel = document.createElement("label");
       newNameLabel.innerText = "New Name"
       newName = document.createElement("input");
@@ -179,10 +192,9 @@ var view = {
       newClickCounts.type = "text";
       newClickCounts.id = "newclickcounts"
       newClickCountLabel.append(newClickCounts)
-      adminConsole = document.getElementById("admin-console");
       submitButton = document.createElement("button");
       submitButton.type = "submit";
-      submitButton.innerText="submit"
+      submitButton.innerText="Submit"
       submitButton.addEventListener("click",(function(){
           return function(){
             octopus.nameChange = true;
@@ -190,16 +202,12 @@ var view = {
           newClickCounts.value);
           };
       })(newName));
-      adminConsole.append(adminButton);
-      adminConsole.append(linebreak1);
+      adminConsole = document.getElementById("admin-console");
       adminConsole.append(newNameLabel);
-      adminConsole.append(linebreak2)
+      adminConsole.append(linebreak1)
       adminConsole.append(newClickCountLabel);
-      adminConsole.append(linebreak3)
+      adminConsole.append(linebreak2)
       adminConsole.append(submitButton);
-    },
-    render: function(){
-
     }
   }
 };
