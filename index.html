@@ -11,8 +11,17 @@
       </div>
       <div id="display">
       </div>
-      <div id="admin-console">
-      </div>
+        <div>
+        <button type="submit" id="admin" style="display:none">Admin</button><br>
+        </div>
+        <div id="admin-console" style="display:none">
+        <form>
+            <label>New Name:<input type="text" id="newname"></label><br>
+            <label>Clicks:<input type="text" id="newClickCounts"></label>
+        </form>
+        <button type="submit" id="save">Save</button>
+        <button type="submit" id="cancel">Cancel</button>
+        </div>
       <script src="js/script.js"></script>
     </body>
 </html>
