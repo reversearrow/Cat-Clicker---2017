@@ -8,15 +8,11 @@ Project Requirements for Cat Clicker Premium Pro
 Visuals
 The application should display:
 
-a list of cats by name
-
-an area to display the selected cat
-
-an admin button
-
-an admin area with inputs for changing the cat's name, url, and number of clicks (hidden by default)
-
-In the cat display area, the following should be displayed
+- a list of cats by name
+- an area to display the selected cat
+- an admin button
+- an admin area with inputs for changing the cat's name, url, and number of clicks (hidden by default)
+- In the cat display area, the following should be displayed
 
 the cat's name
 a picture of the cat
