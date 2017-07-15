@@ -174,6 +174,7 @@ var view = {
             octopus.nameChange = true;
             octopus.updateValues(octopus.currentRender["id"],newName.value,
             newClickCounts.value);
+            view.admin.cancel()
           };
         })(newName,newClicks));
       cancelButton = document.getElementById("cancel");
