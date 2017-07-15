@@ -37,6 +37,7 @@ var model = {
 var octopus = {
   currentRender: null,
   nameChange: false,
+  //adminButtonDisplayed: false,
   addNewCat: function(catID,catName,picLoc,clicks){
       model.add({
           id: catID,
@@ -67,10 +68,7 @@ var octopus = {
     return model.getAllCats()
   },
   getSelectedCat: function(id){
-    checkAdmin = document.getElementById("admin");
-    if(!checkAdmin){
-        view.admin.init()
-    }
+    view.admin.init()
     cat = octopus.allCats()[id]
     //console.log(cat)
     octopus.currentRender = cat
@@ -163,53 +161,36 @@ var view = {
   },
   admin: {
     init: function(){
-      adminConsole = document.getElementById("admin-console");
-      adminButton = document.createElement("button");
-      linebreak = document.createElement("br");
-      adminButton.type = "submit";
-      adminButton.innerText = "Admin"
-      adminButton.id = "admin"
-      adminConsole.append(adminButton);
-      adminConsole.append(linebreak);
+      adminButton = document.getElementById("admin")
+      adminButton.style = "display:block"
       adminButton.addEventListener("click",function(){
           view.admin.render()
-          console.log("Hello")
       })
-    },
-    render: function(){
-      linebreak1 = document.createElement("br");
-      linebreak2 = document.createElement("br");
-      newNameLabel = document.createElement("label");
-      newNameLabel.innerText = "New Name"
-      newName = document.createElement("input");
-      newName.type = "text"
-      //newName.value = "(enter new name)";
-      newName.id = "newname"
-      newNameLabel.append(newName);
-      newClickCountLabel = document.createElement("label");
-      newClickCountLabel.innerText = "Click Counts"
-      newClickCounts = document.createElement("input");
-      newClickCounts.type = "text";
-      newClickCounts.id = "newclickcounts"
-      newClickCountLabel.append(newClickCounts)
-      submitButton = document.createElement("button");
-      submitButton.type = "submit";
-      submitButton.innerText="Submit"
-      submitButton.addEventListener("click",(function(){
+      newName = document.getElementById("newname");
+      newClicks = document.getElementById("newClickCounts");
+      saveButton = document.getElementById("save");
+      saveButton.addEventListener("click",(function(newName,newClicks){
           return function(){
             octopus.nameChange = true;
             octopus.updateValues(octopus.currentRender["id"],newName.value,
-          newClickCounts.value);
+            newClickCounts.value);
+            view.admin.cancel()
           };
-      })(newName));
-      adminConsole = document.getElementById("admin-console");
-      adminConsole.append(newNameLabel);
-      adminConsole.append(linebreak1)
-      adminConsole.append(newClickCountLabel);
-      adminConsole.append(linebreak2)
-      adminConsole.append(submitButton);
-    }
+        })(newName,newClicks));
+      cancelButton = document.getElementById("cancel");
+      cancelButton.addEventListener("click",function(){
+          view.admin.cancel()
+      })
+  },
+  render: function(){
+    adminConsole = document.getElementById("admin-console");
+    adminConsole.style = "display:block"
+  },
+  cancel: function(){
+    adminConsole = document.getElementById("admin-console");
+    adminConsole.style = "display:none"
   }
+}
 };
 
 localStorage.clear()
